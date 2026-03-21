@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE museum of port — Entrance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ink: #0e0d0b;
+      --paper: #f0ebe2;
+      --rust: #8b3a2a;
+      --salt: #d4cfc6;
+      --mist: #b8b3aa;
+      --fog: rgba(14,13,11,0.06);
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 100;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.04;
+    }
+
+    /* Horizontal lines background */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 39px,
+        var(--salt) 39px,
+        var(--salt) 40px
+      );
+      opacity: 0.5;
+    }
+
+    .stage {
+      position: relative; z-index: 1;
+      width: 100vw; height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
+      grid-template-columns: 80px 1fr 80px;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 32px 40px 0;
+    }
+
+    .label-small {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--mist);
+      text-transform: uppercase;
+      line-height: 1.6;
+    }
+
+    .coord-display {
+      text-align: right;
+    }
+
+    .coord-display .live {
+      color: var(--rust);
+      animation: blink 2s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* CENTER BLOCK */
+    .center {
+      grid-column: 2;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+    }
+
+    .title-block {
+      text-align: center;
+      position: relative;
+    }
+
+    .the-word {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      color: var(--mist);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 1.2s ease 0.2s forwards;
+    }
+
+    .museum-title {
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+      opacity: 0;
+      animation: fadeUp 1.4s ease 0.4s forwards;
+    }
+
+    .museum-title em {
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    .of-port {
+      display: block;
+      font-size: clamp(36px, 5.5vw, 68px);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      opacity: 0;
+      animation: fadeUp 1.4s ease 0.6s forwards;
+    }
+
+    /* Divider line */
+    .divider {
+      width: 1px;
+      height: 0;
+      background: var(--ink);
+      margin: 28px auto;
+      animation: growLine 1s ease 1.2s forwards;
+    }
+
+    @keyframes growLine {
+      to { height: 48px; }
+    }
+
+    /* Port address */
+    .port-info {
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.6s forwards;
+    }
+
+    .port-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--mist);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .port-address {
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+    }
+
+    .port-address .ip-part { color: var(--mist); }
+    .port-address .port-num {
+      color: var(--rust);
+      position: relative;
+    }
+
+    .port-address .port-num::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 1px;
+      background: var(--rust);
+      opacity: 0.4;
+    }
+
+    /* Manifesto */
+    .manifesto {
+      margin-top: 36px;
+      max-width: 420px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 1s ease 2s forwards;
+    }
+
+    .manifesto p {
+      font-size: 14px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.9;
+      color: var(--mist);
+      border-top: 1px solid var(--salt);
+      border-bottom: 1px solid var(--salt);
+      padding: 16px 0;
+    }
+
+    /* Enter button */
+    .enter-wrap {
+      margin-top: 40px;
+      opacity: 0;
+      animation: fadeUp 1s ease 2.4s forwards;
+    }
+
+    .enter-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      padding: 14px 40px;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.4s ease;
+      cursor: crosshair;
+    }
+
+    .enter-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .enter-btn:hover::before { transform: translateY(0); }
+    .enter-btn:hover { color: var(--paper); }
+
+    .enter-btn span { position: relative; z-index: 1; }
+
+    /* BOTTOM BAR */
+    .bottom-bar {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 40px 32px;
+      opacity: 0;
+      animation: fadeUp 1s ease 2.8s forwards;
+    }
+
+    .disclaimer {
+      max-width: 300px;
+    }
+
+    .disclaimer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: var(--mist);
+      line-height: 1.8;
+    }
+
+    .disclaimer p + p { margin-top: 4px; }
+
+    .status-block {
+      text-align: right;
+    }
+
+    .status-row {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--mist);
+      line-height: 1.8;
+    }
+
+    .status-row .dot {
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--rust);
+      margin-right: 6px;
+      vertical-align: middle;
+      animation: pulse 3s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.7); }
+    }
+
+    /* LEFT / RIGHT vertical text */
+    .side-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1s ease 3s forwards;
+    }
+
+    .side-text span {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      color: var(--salt);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+
+    .side-left { grid-column: 1; grid-row: 2; }
+    .side-right { grid-column: 3; grid-row: 2; }
+    .side-right span { transform: rotate(180deg); }
+
+    /* Corner marks */
+    .corner {
+      position: fixed;
+      width: 20px; height: 20px;
+      z-index: 5;
+    }
+    .corner::before, .corner::after {
+      content: '';
+      position: absolute;
+      background: var(--mist);
+    }
+    .corner::before { width: 1px; height: 16px; }
+    .corner::after  { width: 16px; height: 1px; }
+
+    .corner-tl { top: 20px; left: 20px; }
+    .corner-tl::before { top: 0; left: 0; }
+    .corner-tl::after  { top: 0; left: 0; }
+
+    .corner-tr { top: 20px; right: 20px; }
+    .corner-tr::before { top: 0; right: 0; }
+    .corner-tr::after  { top: 0; right: 0; }
+
+    .corner-bl { bottom: 20px; left: 20px; }
+    .corner-bl::before { bottom: 0; left: 0; }
+    .corner-bl::after  { bottom: 0; left: 0; }
+
+    .corner-br { bottom: 20px; right: 20px; }
+    .corner-br::before { bottom: 0; right: 0; }
+    .corner-br::after  { bottom: 0; right: 0; }
+
+    /* Floating port number hint — subtle */
+    .float-hint {
+      position: fixed;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      opacity: 0;
+      animation: fadeIn 1s ease 3.4s forwards;
+    }
+
+    .port-pill {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--mist);
+      background: none;
+      padding: 0;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+
+    .port-pill:hover { opacity: 1; }
+    .port-pill.active { color: var(--rust); opacity: 1; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── MODAL OVERLAY ── */
+    #modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(14,13,11,0);
+      backdrop-filter: blur(0px);
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+      transition: background 0.7s ease, backdrop-filter 0.7s ease;
+    }
+    #modal-overlay.open {
+      background: rgba(14,13,11,0.82);
+      backdrop-filter: blur(6px);
+      pointer-events: all;
+    }
+
+    #modal {
+      position: relative;
+      width: min(760px, 90vw);
+      max-height: 85vh;
+      background: var(--paper);
+      border: 1px solid var(--salt);
+      overflow-y: auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease 0.15s, transform 0.6s cubic-bezier(0.22,1,0.36,1) 0.15s;
+      scrollbar-width: thin;
+      scrollbar-color: var(--salt) transparent;
+    }
+    #modal-overlay.open #modal {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* Corner brackets on modal */
+    #modal::before, #modal::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--rust);
+      border-style: solid;
+    }
+    #modal::before { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+    #modal::after  { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+    .modal-inner {
+      padding: 56px 64px 48px;
+    }
+
+    .modal-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      color: var(--rust);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .modal-tag::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--salt);
+    }
+
+    .modal-section {
+      margin-bottom: 44px;
+    }
+
+    .modal-section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--mist);
+      margin-bottom: 10px;
+    }
+
+    .modal-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+
+    .modal-section h2 strong {
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .modal-section p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: #3a3830;
+      margin-bottom: 14px;
+    }
+
+    .modal-section p:last-child { margin-bottom: 0; }
+
+    .modal-section p em {
+      color: var(--rust);
+      font-style: italic;
+    }
+
+    .modal-rule {
+      width: 100%; height: 1px;
+      background: var(--salt);
+      margin: 0 0 44px;
+    }
+
+    .modal-close {
+      display: block;
+      margin: 0 auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: none;
+      border: 1px solid var(--salt);
+      padding: 13px 36px;
+      cursor: crosshair;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.35s ease;
+    }
+    .modal-close::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--ink);
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.76,0,0.24,1);
+    }
+    .modal-close:hover::before { transform: translateY(0); }
+    .modal-close:hover { color: var(--paper); }
+    .modal-close span { position: relative; z-index: 1; }
+
+    /* Mouse follower */
+    #cursor {
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--rust);
+      pointer-events: none;
+      z-index: 999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+      mix-blend-mode: multiply;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--rust);
+      pointer-events: none;
+      z-index: 998;
+      transform: translate(-50%, -50%);
+      opacity: 0.4;
+      transition: transform 0.25s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    }
+    /* ══ 裏 RETRO OVERLAY ══ */
+    #ura-overlay {
+      position: fixed; inset: 0; z-index: 600;
+      background: #c0c0c0;
+      font-family: 'MS PGothic', 'ＭＳ Ｐゴシック', 'Osaka', sans-serif;
+      font-size: 13px;
+      color: #000;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+    }
+    #ura-overlay.show { display: flex; }
+
+    #ura-scanlines {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent, transparent 2px,
+        rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+      );
+    }
+
+    #ura-inner {
+      position: relative; z-index: 2;
+      min-height: 100%;
+      display: flex; flex-direction: column;
+    }
+
+    /* Header bar — Win98 style */
+    #ura-header {
+      background: linear-gradient(to right, #000080, #1084d0);
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 8px;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    #ura-blink, #ura-blink2 {
+      animation: ura-blink 0.8s step-end infinite;
+      font-size: 8px;
+    }
+    #ura-blink2 { animation-delay: 0.4s; }
+    @keyframes ura-blink {
+      0%,100%{opacity:1} 50%{opacity:0}
+    }
+
+    /* Marquee */
+    #ura-marquee-wrap {
+      background: #000080;
+      color: #00ff00;
+      font-size: 11px;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 2px 0;
+    }
+    #ura-marquee {
+      display: inline-block;
+      animation: marquee 18s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* Body */
+    #ura-body {
+      display: flex;
+      gap: 0;
+      padding: 12px;
+      flex: 1;
+      align-items: flex-start;
+    }
+
+    #ura-top-img {
+      width: 100%;
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      border: 2px inset #888;
+      background: #eee;
+      padding: 10px;
+      margin: 8px 12px;
+      display: none;
+    }
+
+    #ura-welcome {
+      flex: 1;
+      background: #fff;
+      border: 2px inset #888;
+      padding: 16px 20px;
+      text-align: center;
+      margin-right: 10px;
+    }
+
+    #ura-title-text {
+      font-size: 18px;
+      font-weight: bold;
+      color: #cc0000;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+      text-shadow: 1px 1px 0 #ffaaaa;
+    }
+
+    #ura-sub {
+      font-size: 10px;
+      color: #666;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    #ura-divider-retro, #ura-divider-retro2 {
+      color: #cc8800;
+      font-size: 11px;
+      margin: 8px 0;
+      letter-spacing: -1px;
+    }
+
+    #ura-body-text {
+      font-size: 13px;
+      line-height: 2;
+      text-align: left;
+      display: inline-block;
+      margin: 8px auto;
+    }
+
+    #ura-enter-btn {
+      display: inline-block;
+      margin: 14px auto 10px;
+      background: linear-gradient(to bottom, #ffee00, #ff8800);
+      border: 2px outset #cc6600;
+      color: #000;
+      font-size: 15px;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 8px 28px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      animation: btnPulse 1.5s ease infinite;
+    }
+    #ura-enter-btn:hover {
+      background: linear-gradient(to bottom, #ff8800, #cc4400);
+      color: #fff;
+    }
+    @keyframes btnPulse {
+      0%,100%{ box-shadow: 0 0 0 rgba(255,136,0,0); }
+      50%    { box-shadow: 0 0 8px rgba(255,136,0,0.7); }
+    }
+
+    #ura-counter-text {
+      font-size: 11px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    /* Links sidebar */
+    #ura-links {
+      width: 140px;
+      background: #ffffcc;
+      border: 2px inset #888;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 2;
+    }
+    #ura-links p { margin: 0; }
+    .ura-link { color: #0000cc; font-size: 12px; }
+    .ura-link:visited { color: #660099; }
+    #ura-link-note { color: #888; margin-top: 8px; line-height: 1.5; }
+
+    /* Footer */
+    #ura-footer {
+      background: #808080;
+      color: #fff;
+      text-align: center;
+      font-size: 11px;
+      padding: 6px;
+      line-height: 1.8;
+    }
+    #ura-footer a { color: #ffff99; }
+    #ura-close-btn { color: #ffff99; text-decoration: underline; cursor: pointer; }
+
+    /* ══ 「来るな」フラッシュ ══ */
+    #kuruna-overlay {
+      position: fixed; inset: 0; z-index: 900;
+      background: #000;
+      display: none;
+      align-items: flex-start;
+      justify-content: flex-start;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    #kuruna-overlay.show {
+      display: flex;
+      pointer-events: all;
+    }
+    #kuruna-text {
+      font-family: 'MS PGothic', 'ＭＳ Ｐゴシック', sans-serif;
+      font-size: 13px;
+      color: #cc0000;
+      font-weight: bold;
+      line-height: 1.6;
+      word-break: break-all;
+      padding: 8px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Corner marks -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="stage">
+
+    <!-- TOP -->
+    <div class="top-bar">
+      <div class="label-small">
+        ENTRANCE<br>
+        EST. ????
+      </div>
+      <div class="coord-display label-small">
+        <span id="ts">——</span><br>
+        <span class="live" id="liveBtn" style="cursor:pointer;user-select:none;">● LIVE</span>
+      </div>
+    </div>
+
+    <!-- SIDE LEFT -->
+    <div class="side-text side-left">
+      <span>unknown — origin</span>
+    </div>
+
+    <!-- CENTER -->
+    <div class="center">
+      <div class="title-block">
+        <span class="the-word">THE</span>
+        <div class="museum-title"><em>museum</em></div>
+        <div class="of-port">of port</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="port-info">
+        <div class="port-label">Access via</div>
+        <div class="port-address">
+          <span class="ip-part">http://[IP]:</span><span class="port-num" id="portNum">????</span>
+        </div>
+      </div>
+
+      <div class="manifesto">
+        <p>
+          Each port opens a different door.<br>
+          The photographs may be real.<br>
+          They may not be.<br>
+          Even the maker does not know the whole.
+        </p>
+      </div>
+
+      <div class="enter-wrap">
+        <a href="#" class="enter-btn" id="enterBtn">
+          <span>Enter</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SIDE RIGHT -->
+    <div class="side-text side-right">
+      <span>port — variable</span>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="bottom-bar">
+      <div class="disclaimer">
+        <p>PHOTOGRAPHS — REAL OR CONSTRUCTED</p>
+        <p>CURATOR — PARTIALLY KNOWN</p>
+        <p>CONTENTS — UNDISCLOSED</p>
+      </div>
+      <div class="status-block">
+        <div class="status-row"><span class="dot"></span>SIGNAL DETECTED</div>
+        <div class="status-row label-small" style="margin-top:4px">ROOMS: UNKNOWN COUNT</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal-overlay">
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-inner">
+
+        <div class="modal-tag">Visitor's Note — Read Before Proceeding</div>
+
+        <div class="modal-section">
+          <div class="modal-section-num">§ 01</div>
+          <h2>The <strong>Port</strong> is the Address.<br>The Address is the Room.</h2>
+          <p>
+            このミュージアムは、ひとつのURLに存在しない。
+            アドレスバーに打ち込む数字——ポート番号——によって、まったく異なる場所が現れる。
+            <em>http://[IP]:3000</em> と <em>http://[IP]:8080</em> は、同じ建物の別の部屋ではない。それは別の大陸であり、別の時代であり、あるいは存在しない場所かもしれない。
+          </p>
+          <p>
+            ポート番号とは本来、コンピュータが通信のために使う「窓口番号」に過ぎない。
+            しかしここでは、それが扉になる。
+            あなたが何番を打ち込むかによって、辿り着く展示は変わる。
+            順番も、地図も、正解もない。ただ、数字を変えること。それだけが唯一の案内だ。
+          </p>
+          <p>
+            どのポートに何があるのか——それは、あなたが試すまで誰にもわからない。
+            ここに来た者のほとんどは、自分が何を見つけたのかを説明できない。
+          </p>
+        </div>
+
+        <div class="modal-rule"></div>
+
+        <div class="modal-section">
+          <div class="modal-section-num">§ 02</div>
+          <h2><em>Photography</em> as <strong>Evidence</strong>.<br>Or Something Like It.</h2>
+          <p>
+            このミュージアムに展示された写真は、すべて「本物らしく」見える。
+            海岸線、廃墟の廊下、霧の中の港町、誰かの後ろ姿——それらは確かに、写真という形式をしている。
+          </p>
+          <p>
+            だが、それが現実の記録であるという保証はどこにもない。
+            撮影日時は改ざんされているかもしれない。場所のメタデータは存在しないか、あるいは意図的に偽られている。
+            被写体が実在したかどうかも、検証する方法がない。
+            <em>写真は嘘をつかない、というのは古い神話だ。</em>
+            写真は常に、何かを切り取ることで残りを隠す。
+          </p>
+          <p>
+            真実と虚構の境界線を探すことに意味があるかもしれないし、ないかもしれない。
+            ここでは、その問いそのものが展示の一部だと考えてほしい。
+            あなたが「これは本物だ」と感じた瞬間も、「これは作られたものだ」と気づいた瞬間も、
+            どちらも等しく有効な体験として記録される。
+          </p>
+        </div>
+
+        <div class="modal-rule"></div>
+
+        <div class="modal-section">
+          <div class="modal-section-num">§ 03</div>
+          <h2>The <strong>Maker</strong> Does Not Know<br><em>the Whole</em>.</h2>
+          <p>
+            このミュージアムには制作者がいる。しかし制作者は、全体を把握していない。
+            ある展示は意図して作られた。ある展示は、システムが自律的に生成した。
+            ある展示は、過去に制作者が作ったことを忘れたものかもしれない。
+          </p>
+          <p>
+            制作者が確認できていないポートが存在する。
+            アクセスされたことのないポートが存在する。
+            あるいは、制作者が設置した覚えのない展示が、どこかのポートで静かに待っている可能性がある。
+          </p>
+          <p>
+            これは無責任の告白ではない。
+            <em>創造とは、作った瞬間から制作者の手を離れる。</em>
+            制作者が全貌を知らないということは、あなたの発見がはじめての発見になり得るということだ。
+            誰も見たことのない部屋を、あなたが最初に開けるかもしれない。
+            あるいは、誰かが残した痕跡をあなたが見つけるかもしれない。
+          </p>
+          <p>
+            制作者への問い合わせは受け付けていない。なぜなら、答えられる保証がないからだ。
+          </p>
+        </div>
+
+        <button class="modal-close" id="modalClose"><span>Close &amp; Enter</span></button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 裏 RETRO OVERLAY -->
+  <div id="ura-overlay">
+    <div id="ura-scanlines"></div>
+    <div id="ura-inner">
+      <div id="ura-header">
+        <span id="ura-blink">&#9646;&#9646;&#9646;</span>
+        &nbsp;THE museum of port&nbsp;
+        <span id="ura-blink2">&#9646;&#9646;&#9646;</span>
+      </div>
+      <div id="ura-marquee-wrap">
+        <div id="ura-marquee">
+          &nbsp;&nbsp;&nbsp;※ このサイトはInternet Explorer 6.0以上推奨です　※ 閲覧者数：<span id="ura-count">000413</span>&nbsp;&nbsp;&nbsp;※ 最終更新：????/??/??&nbsp;&nbsp;&nbsp;※ このページを「お気に入り」に追加してください&nbsp;&nbsp;&nbsp;
+        </div>
+      </div>
+      <div id="ura-body">
+        <div id="ura-top-img">[ IMAGE LOADING... ]</div>
+        <div id="ura-welcome">
+          <p id="ura-title-text">～ 裏口へようこそ ～</p>
+          <p id="ura-sub">museum of port / hidden entrance</p>
+          <div id="ura-divider-retro">☆━━━━━━━━━━━━━━━━━━━━━━━☆</div>
+          <p id="ura-body-text">
+            このページは<font color="#ff6600">非公式</font>です。<br>
+            管理人もこの先に何があるかを<font color="#ff0000">知りません</font>。<br><br>
+            ここから先に進むことを推奨しません。<br>
+            それでも進みたい方は下のボタンを押してください。<br><br>
+            <font color="#888888" size="1">※ 音が出ます。ご注意ください。</font>
+          </p>
+          <div id="ura-divider-retro2">☆━━━━━━━━━━━━━━━━━━━━━━━☆</div>
+          <a href="#" id="ura-enter-btn">
+            ▶▶ ENTER ◀◀
+          </a>
+          <p id="ura-counter-text">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="">
+            あなたは <b id="ura-visitor">413</b> 人目の訪問者です
+          </p>
+        </div>
+      </div>
+      <div id="ura-footer">
+        <p>Copyright (C) THE museum of port All Rights Reserved.</p>
+        <p id="ura-close-note"><a href="#" id="ura-close-btn">[ 表へ戻る ]</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 暗転 + 「来るな」 -->
+  <div id="kuruna-overlay">
+    <div id="kuruna-text">来るな</div>
+  </div>
+
+  <script>
+    // Timestamp
+    function updateTS() {
+      const now = new Date();
+      const ts = now.toISOString().replace('T',' ').slice(0,19);
+      document.getElementById('ts').textContent = ts + ' UTC';
+    }
+    updateTS();
+    setInterval(updateTS, 1000);
+
+    // Animated port number cycling
+    const ports = [3000, 8080, 4444, 1337, 9000, 5050, 8888, 2222];
+    let pi = 0;
+    const portEl = document.getElementById('portNum');
+    setInterval(() => {
+      pi = (pi + 1) % ports.length;
+      portEl.textContent = ports[pi];
+    }, 2200);
+
+    // Modal open/close
+    const overlay = document.getElementById('modal-overlay');
+    const modal   = document.getElementById('modal');
+
+    document.getElementById('enterBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      overlay.classList.add('open');
+      modal.scrollTop = 0;
+    });
+
+    document.getElementById('modalClose').addEventListener('click', () => {
+      overlay.classList.remove('open');
+      // port number flicker on close
+      const randomPort = Math.floor(Math.random() * 9000) + 1000;
+      portEl.textContent = randomPort;
+      setTimeout(() => { portEl.textContent = '????'; }, 2800);
+    });
+
+    // Click outside modal to close
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') overlay.classList.remove('open');
+    });
+
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    function animRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+
+    document.querySelectorAll('a, button, .modal-close').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '10px';
+        cursor.style.height = '10px';
+        ring.style.width = '48px';
+        ring.style.height = '48px';
+        ring.style.opacity = '0.7';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '6px';
+        cursor.style.height = '6px';
+        ring.style.width = '28px';
+        ring.style.height = '28px';
+        ring.style.opacity = '0.4';
+      });
+    });
+    // ── 裏モード ──
+    const uraOverlay  = document.getElementById('ura-overlay');
+    const kurunaOv    = document.getElementById('kuruna-overlay');
+    const kurunaText  = document.getElementById('kuruna-text');
+    const stage       = document.querySelector('.stage');
+
+    // LIVE button → 裏へ
+    document.getElementById('liveBtn').addEventListener('click', () => {
+      uraOverlay.classList.add('show');
+      document.getElementById('ura-visitor').textContent =
+        String(Math.floor(Math.random() * 900) + 100);
+      document.getElementById('ura-count').textContent =
+        String(Math.floor(Math.random() * 9000) + 1000).padStart(6,'0');
+    });
+
+    // 表へ戻る
+    document.getElementById('ura-close-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      uraOverlay.classList.remove('show');
+    });
+
+    // 裏の ENTER → 即フラッシュ + 不協和ビープ + 「来るな」壁 → 0.5秒で即消去
+    document.getElementById('ura-enter-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // 「来るな」を大量生成
+      const word = '来るな';
+      const repeat = 5000;
+      kurunaText.textContent = Array(repeat).fill(word).join('');
+
+      // 即表示
+      uraOverlay.classList.remove('show');
+      kurunaOv.classList.add('show');
+
+      // 不協和音 — 複数の音程を同時に鳴らし続ける
+      let audioCtx = null;
+      const oscillators = [];
+      const gains = [];
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // 不協和な周波数の組み合わせ
+        const freqs = [220, 233, 311, 370, 415, 554, 740, 880, 932, 1109];
+        freqs.forEach((freq, i) => {
+          const osc  = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.type = i % 2 === 0 ? 'sawtooth' : 'square';
+          osc.frequency.value = freq;
+          gain.gain.value = 0.18;
+          osc.start();
+          oscillators.push(osc);
+          gains.push(gain);
+        });
+      } catch(err) {}
+
+      // 0.5秒後に即消去・音停止・表に戻る
+      setTimeout(() => {
+        kurunaOv.classList.remove('show');
+        // 音を即停止
+        oscillators.forEach(osc => { try { osc.stop(); } catch(e){} });
+        if (audioCtx) { try { audioCtx.close(); } catch(e){} }
+      }, 500);
+    });
+  </script>
+</body>
+</html>
